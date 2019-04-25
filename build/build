@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-cd-ssh> for details.
+
+set -ex
+
+# Install required packages
+DEBIAN_FRONTEND=noninteractive apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-recommends \
+    openssh-client \
+    sshpass
+
+# Display versions
+cat /etc/debian_version
+
+# Clean APT cache
+apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
+rm -rf /frx/php*

@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-cd-ssh> for details.
+
+# Stop on first error
+set -eE
+
+# Handle errors
+function trap_err() {
+    echo "[!] Error: /frx/start:$1"
+}
+trap 'trap_err $LINENO' ERR
+
+echo "[FEROX CD SSH: https://github.com/frxyt/docker-cd-ssh]"
+
+function frx_get_env_var() {
+    local tmp="${FRX_VARS_PREFIX}${1}"
+    tmp="${!tmp}"
+    [[ -z "${tmp}" ]] && tmp="${!1}"
+    echo "${tmp}"
+}
+
+function frx_print_var() {
+    echo "$1: '${!1}'"
+}
+
+# Get vars
+SSH_PRIVATE_KEY=$(frx_get_env_var 'SSH_PRIVATE_KEY')
+SSH_KNOWN_HOSTS=$(frx_get_env_var 'SSH_KNOWN_HOSTS')
+SSH_USER=$(frx_get_env_var 'SSH_USER')
+SSH_PASS=$(frx_get_env_var 'SSH_PASS')
+SSH_HOST=$(frx_get_env_var 'SSH_HOST')
+SSH_PORT=$(frx_get_env_var 'SSH_PORT')
+
+if [[ -n "${FRX_VARS_DEBUG}" ]]; then
+    frx_print_var 'SSH_PRIVATE_KEY'
+    frx_print_var 'SSH_KNOWN_HOSTS'
+    frx_print_var 'SSH_USER'
+    frx_print_var 'SSH_PASS'
+    frx_print_var 'SSH_HOST'
+    frx_print_var 'SSH_PORT'
+fi
+
+# Prepare SSH
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+eval "$(ssh-agent)" > /dev/null
+echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+chmod 644 ~/.ssh/known_hosts
+
+# Prepare connection
+[[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -p ${SSH_PORT}"
+echo "ssh ${SSH_USER}@${SSH_HOST}"
+
+# Remove error handling
+trap - ERR
+
+# Run SSH
+if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
+    ssh ${SSH_USER}@${SSH_HOST} "$@"
+else
+    export SSHPASS="${SSH_PASS}"
+    sshpass -e ssh ${SSH_USER}@${SSH_HOST} "$@"
+fi
