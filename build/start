@@ -52,7 +52,6 @@ eval "$(ssh-agent)" > /dev/null
 # Prepare SSH
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-
 if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
     echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null 2>&1
 fi
