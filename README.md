@@ -13,6 +13,39 @@
 
 **`frxyt/cd-ssh`**
 
+## `gitlab-ci.yml` example
+
+```yaml
+stages:
+  - deploy
+
+.template:deploy: &template_deploy
+  image: frxyt/cd-ssh
+  tags:
+    - docker-all
+  stage: deploy
+  script:
+    - cd /path/to/app && git fetch
+    - cd /path/to/app && git checkout ${CI_COMMIT_SHA}
+
+deploy:test:
+  <<: *template_deploy
+  environment:
+    name: test
+    url: https://app.example.com
+  only:
+    - develop
+  variables:
+    FRX_VARS_PREFIX: APP_TEST_
+```
+
+Then, these variables must be defined in `Settings > CI / CD > Environment variables`:
+
+* `APP_TEST_SSH_HOST`
+* `SSH_KNOWN_HOSTS`
+* `SSH_PRIVATE_KEY`
+* `SSH_USER`
+
 ## License
 
 This project and images are published under the [MIT License](LICENSE).
