@@ -12,6 +12,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-rec
     openssh-client \
     sshpass
 
+# Make symbolic link
+ln -s /frx/start /usr/bin/cd-ssh
+
 # Display versions
 cat /etc/debian_version
 

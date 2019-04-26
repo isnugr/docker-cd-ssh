@@ -18,5 +18,3 @@ ENV FRX_VARS_DEBUG= \
 COPY ./build ./Dockerfile ./LICENSE ./README.md  /frx/
 
 RUN /frx/build
-
-ENTRYPOINT [ "/frx/start" ]

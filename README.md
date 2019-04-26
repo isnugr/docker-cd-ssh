@@ -25,8 +25,8 @@ stages:
     - docker-all
   stage: deploy
   script:
-    - cd /path/to/app && git fetch
-    - cd /path/to/app && git checkout ${CI_COMMIT_SHA}
+    - cd-ssh "cd /path/to/app && git fetch"
+    - cd-ssh "cd /path/to/app && git checkout ${CI_COMMIT_SHA}"
 
 deploy:test:
   <<: *template_deploy

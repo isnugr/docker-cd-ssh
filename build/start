@@ -10,10 +10,9 @@ set -eE
 # Handle errors
 function trap_err() {
     echo "[!] Error: /frx/start:$1"
+    echo "/frx/start:$1: $(head -$1 /frx/start | tail -1)"
 }
 trap 'trap_err $LINENO' ERR
-
-echo "[FEROX CD SSH: https://github.com/frxyt/docker-cd-ssh]"
 
 function frx_get_env_var() {
     local tmp="${FRX_VARS_PREFIX}${1}"
@@ -34,22 +33,34 @@ SSH_PASS=$(frx_get_env_var 'SSH_PASS')
 SSH_HOST=$(frx_get_env_var 'SSH_HOST')
 SSH_PORT=$(frx_get_env_var 'SSH_PORT')
 
-if [[ -n "${FRX_VARS_DEBUG}" ]]; then
-    frx_print_var 'SSH_PRIVATE_KEY'
-    frx_print_var 'SSH_KNOWN_HOSTS'
-    frx_print_var 'SSH_USER'
-    frx_print_var 'SSH_PASS'
-    frx_print_var 'SSH_HOST'
-    frx_print_var 'SSH_PORT'
+if [[ ! -f /frx/running ]]; then 
+    echo "[FEROX CD SSH: https://github.com/frxyt/docker-cd-ssh]"
+    if [[ -n "${FRX_VARS_DEBUG}" ]]; then
+        frx_print_var 'SSH_PRIVATE_KEY'
+        frx_print_var 'SSH_KNOWN_HOSTS'
+        frx_print_var 'SSH_USER'
+        frx_print_var 'SSH_PASS'
+        frx_print_var 'SSH_HOST'
+        frx_print_var 'SSH_PORT'
+    fi
+    touch /frx/running
 fi
+
+# Warm up ssh agent
+eval "$(ssh-agent)" > /dev/null
 
 # Prepare SSH
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-eval "$(ssh-agent)" > /dev/null
 echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null 2>&1
 echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
 chmod 644 ~/.ssh/known_hosts
+
+# Test if command line is only a single parameter
+if [[ $# > 1 ]]; then
+    echo "Only 1 parameter can be given, $# given: $@"
+    exit 0;
+fi
 
 # Prepare connection
 [[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -p ${SSH_PORT}"
