@@ -52,8 +52,15 @@ eval "$(ssh-agent)" > /dev/null
 # Prepare SSH
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
-echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null 2>&1
-echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+
+if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
+    echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null 2>&1
+fi
+if [[ -n "${SSH_KNOWN_HOSTS}" ]]; then
+    echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+else
+    ssh-keyscan $([[ -n "${SSH_PORT}" ]] && echo "-p ${SSH_PORT}") ${SSH_HOST} > ~/.ssh/known_hosts
+fi
 chmod 644 ~/.ssh/known_hosts
 
 # Test if command line is only a single parameter
