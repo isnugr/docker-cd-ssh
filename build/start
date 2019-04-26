@@ -47,13 +47,13 @@ fi
 mkdir -p ~/.ssh
 chmod 700 ~/.ssh
 eval "$(ssh-agent)" > /dev/null
-echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null
+echo "${SSH_PRIVATE_KEY}" | tr -d '\r' | ssh-add - > /dev/null 2>&1
 echo "${SSH_KNOWN_HOSTS}" > ~/.ssh/known_hosts
 chmod 644 ~/.ssh/known_hosts
 
 # Prepare connection
 [[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -p ${SSH_PORT}"
-echo "ssh ${SSH_USER}@${SSH_HOST}"
+echo "ssh ${SSH_USER}@${SSH_HOST} \"$@\""
 
 # Remove error handling
 trap - ERR
