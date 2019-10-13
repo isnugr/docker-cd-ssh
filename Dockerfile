@@ -13,7 +13,8 @@ ENV FRX_VARS_DEBUG= \
     SSH_USER= \
     SSH_PASS= \
     SSH_HOST= \
-    SSH_PORT=
+    SSH_PORT= \
+    SSH_OPTIONS=
 
 COPY ./build ./Dockerfile ./LICENSE ./README.md  /frx/
 

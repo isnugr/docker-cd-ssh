@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-cd-ssh> for details.
+
+# Stop on first error
+set -eE
+
+# Init cd-ssh
+/frx/cd-init
+
+# Prepare connection
+[[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -P ${SSH_PORT}"
+echo "scp ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} \"$@\""
+
+# Run SSH
+if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
+    scp ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} "$@"
+else
+    export SSHPASS="${SSH_PASS}"
+    sshpass -e scp ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} "$@"
+fi

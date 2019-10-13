@@ -13,11 +13,11 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-rec
     sshpass
 
 # Make symbolic link
-ln -s /frx/start /usr/bin/cd-ssh
+ln -s /frx/cd-scp /usr/bin/cd-scp
+ln -s /frx/cd-ssh /usr/bin/cd-ssh
 
 # Display versions
 cat /etc/debian_version
 
 # Clean APT cache
 apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
-rm -rf /frx/php*
