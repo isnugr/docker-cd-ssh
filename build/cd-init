@@ -25,6 +25,11 @@ function frx_print_var() {
     echo "$1: '${!1}'"
 }
 
+function die() {
+    echo "$@"
+    exit 1;
+}
+
 # Get vars
 SSH_PRIVATE_KEY=$(frx_get_env_var 'SSH_PRIVATE_KEY')
 SSH_KNOWN_HOSTS=$(frx_get_env_var 'SSH_KNOWN_HOSTS')
