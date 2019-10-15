@@ -12,6 +12,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-rec
     ca-certificates \
     curl \
     gettext-base \
+    git \
     jq \
     openssh-client \
     sshpass \
