@@ -9,8 +9,13 @@ set -ex
 # Install required packages
 DEBIAN_FRONTEND=noninteractive apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get install -y --fix-missing --no-install-recommends \
+    ca-certificates \
+    curl \
+    gettext-base \
+    jq \
     openssh-client \
-    sshpass
+    sshpass \
+    wget
 
 # Make symbolic link
 ln -s /frx/cd-scp /usr/bin/cd-scp
