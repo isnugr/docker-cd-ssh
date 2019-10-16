@@ -69,12 +69,6 @@ else
 fi
 chmod 644 ~/.ssh/known_hosts
 
-# Test if command line is only a single parameter
-if [[ $# > 1 ]]; then
-    echo "Only 1 parameter can be given, $# given: $@"
-    exit 0;
-fi
-
 # Prepare connection
 [[ -n "${SSH_OPTIONS}" ]] && SSH_OPTIONS="${SSH_OPTIONS} "
 
