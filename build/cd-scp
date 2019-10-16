@@ -9,8 +9,8 @@
 
 # Prepare connection
 [[ $# < 3 || $# > 4 ]] && die "Wrong call, expected: cd-scp [up|down] LOCAL_PATH REMOTE_PATH [SCP_OPTIONS]"
-[[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -P ${SSH_PORT}"
 [[ -n "$4" ]] && SSH_OPTIONS="${SSH_OPTIONS}$4 "
+[[ -n "${SSH_PORT}" ]] && SSH_OPTIONS="${SSH_OPTIONS}-P ${SSH_PORT} "
 if [[ "$1" =~ ^up ]]; then
     SCP_COMMAND_LINE="scp ${SSH_OPTIONS}$2 ${SSH_USER}@${SSH_HOST}:$3"
 elif [[ "$1" =~ ^down ]]; then
@@ -22,8 +22,8 @@ echo "${SCP_COMMAND_LINE}"
 
 # Run SSH
 if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
-    scp ${SCP_COMMAND_LINE}
+    eval ${SCP_COMMAND_LINE}
 else
     export SSHPASS="${SSH_PASS}"
-    sshpass -e ${SCP_COMMAND_LINE}
+    eval sshpass -e ${SCP_COMMAND_LINE}
 fi
