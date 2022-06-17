@@ -86,8 +86,8 @@ This project and images are published under the [MIT License](LICENSE).
 ```
 MIT License
 
-Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
-Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+Copyright (c) 2019,2022 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+Copyright (c) 2019,2022 Jérémy WALTHER <jeremy.walther@golflima.net>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

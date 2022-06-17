@@ -1,0 +1,45 @@
+# Copyright (c) 2019,2022 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019,2022 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-cd-ssh> for details.
+
+FROM debian:stable-slim
+
+LABEL maintainer="Jérémy WALTHER <jeremy@ferox.yt>"
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    FRX_VARS_DEBUG= \
+    FRX_VARS_PREFIX= \
+    SSH_PRIVATE_KEY= \
+    SSH_KNOWN_HOSTS= \
+    SSH_USER= \
+    SSH_PASS= \
+    SSH_HOST= \
+    SSH_PORT= \
+    SSH_OPTIONS=
+
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y --fix-missing --no-install-recommends \
+        ca-certificates \
+        curl \
+        gettext-base \
+        git \
+        jq \
+        openssh-client \
+        python3 \
+        python3-pip \
+        sshpass \
+        wget; \
+    apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*; \
+    pip3 install j2cli[yaml];
+
+RUN set -ex; \
+    cat /etc/debian_version; \
+    bash --version; \
+    curl --version; \
+    git --version; \
+    j2 --version; \
+    python3 --version;
+
+COPY ./bin/cd-*                                 /usr/bin/
+COPY ./Dockerfile.debian ./LICENSE ./README.md  /frx/

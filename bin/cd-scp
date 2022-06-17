@@ -5,7 +5,7 @@
 # See <https://github.com/frxyt/docker-cd-ssh> for details.
 
 # Init cd-ssh
-. /frx/cd-init
+. /usr/bin/cd-init
 
 # Prepare connection
 [[ $# < 3 || $# > 4 ]] && die "Wrong call, expected: cd-scp [up|down] LOCAL_PATH REMOTE_PATH [SCP_OPTIONS]"

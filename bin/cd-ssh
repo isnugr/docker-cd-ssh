@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Copyright (c) 2019 FEROX YT EIRL, www.ferox.yt <devops@ferox.yt>
+# Copyright (c) 2019 Jérémy WALTHER <jeremy.walther@golflima.net>
+# See <https://github.com/frxyt/docker-cd-ssh> for details.
+
+# Init cd-ssh
+. /usr/bin/cd-init
+
+# Test if command line is only a single parameter
+[[ $# > 1 ]] && die "Only 1 parameter can be given, $# given: $@"
+
+# Prepare connection
+[[ -n "${SSH_PORT}" ]] && SSH_HOST="${SSH_HOST} -p ${SSH_PORT}"
+echo "ssh ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} \"$@\""
+
+# Run SSH
+if [[ -n "${SSH_PRIVATE_KEY}" ]]; then
+    ssh ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} "$@"
+else
+    export SSHPASS="${SSH_PASS}"
+    sshpass -e ssh ${SSH_OPTIONS}${SSH_USER}@${SSH_HOST} "$@"
+fi

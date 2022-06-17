@@ -5,7 +5,7 @@
 # See <https://github.com/frxyt/docker-cd-ssh> for details.
 
 # Init cd-ssh
-. /frx/cd-init
+. /usr/bin/cd-init
 
 # Test if command line is only a single parameter
 [[ $# > 1 ]] && die "Only 1 parameter can be given, $# given: $@"
