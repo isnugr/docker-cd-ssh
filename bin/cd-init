@@ -42,6 +42,7 @@ SSH_OPTIONS=$(frx_get_env_var 'SSH_OPTIONS')
 if [[ ! -f /frx/running ]]; then 
     echo "[FEROX CD SSH: https://github.com/frxyt/docker-cd-ssh]"
     if [[ -n "${FRX_VARS_DEBUG}" ]]; then
+        frx_print_var 'FRX_VARS_PREFIX'
         frx_print_var 'SSH_PRIVATE_KEY'
         frx_print_var 'SSH_KNOWN_HOSTS'
         frx_print_var 'SSH_USER'
